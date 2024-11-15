@@ -100,7 +100,12 @@ and w.NAME = 'Balaton';
 SELECT c.CNTRY_NAME , COUNT(*) liczba
 FROM MYST_MAJOR_CITIES m, MYST_COUNTRY_BOUNDARIES c
 WHERE c.CNTRY_NAME = 'Poland' AND SDO_WITHIN_DISTANCE(m.STGEOM, c.STGEOM, 'distance=100 unit=km') = 'TRUE'
-GROUP BY c.CNTRY_NAME; -- nie działa
+GROUP BY c.CNTRY_NAME;
+
+SELECT c.CNTRY_NAME , m.CITY_NAME
+FROM MYST_MAJOR_CITIES m, MYST_COUNTRY_BOUNDARIES c
+WHERE c.CNTRY_NAME = 'Poland' AND SDO_WITHIN_DISTANCE(m.STGEOM, c.STGEOM, 'distance=100 unit=km') = 'TRUE';
+
 
 ------ B ---------------------------------------------------------------------------------------------------------------
 insert into USER_SDO_GEOM_METADATA
@@ -110,6 +115,7 @@ insert into USER_SDO_GEOM_METADATA
 select * from USER_SDO_GEOM_METADATA;
 
 ------ C ---------------------------------------------------------------------------------------------------------------
+drop index MYST_MAJOR_CITIES_IDX;
 select * from MYST_MAJOR_CITIES;
 CREATE INDEX MYST_MAJOR_CITIES_IDX ON MYST_MAJOR_CITIES(STGEOM) INDEXTYPE IS MDSYS.SPATIAL_INDEX;
 
