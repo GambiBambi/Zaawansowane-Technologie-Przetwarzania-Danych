@@ -108,14 +108,14 @@ WHERE c.CNTRY_NAME = 'Poland' AND SDO_WITHIN_DISTANCE(m.STGEOM, c.STGEOM, 'dista
 
 
 ------ B ---------------------------------------------------------------------------------------------------------------
-insert into USER_SDO_GEOM_METADATA
- select 'MYST_MAJOR_CITIES', 'STGEOM', T.DIMINFO, T.SRID from USER_SDO_GEOM_METADATA T
- where T.TABLE_NAME = 'MAJOR_CITIES';
+insert into USER_SDO_GEOM_METADATA values ('MYST_MAJOR_CITIES', 'STGEOM',SDO_DIM_ARRAY(
+    SDO_DIM_ELEMENT('X', -180, 180, 0.05),
+    SDO_DIM_ELEMENT('Y', -90, 90, 0.05)
+), 8307);
 
-select * from USER_SDO_GEOM_METADATA;
+select * from USER_SDO_GEOM_METADATA where table_name='MYST_MAJOR_CITIES';
 
 ------ C ---------------------------------------------------------------------------------------------------------------
-drop index MYST_MAJOR_CITIES_IDX;
 select * from MYST_MAJOR_CITIES;
 CREATE INDEX MYST_MAJOR_CITIES_IDX ON MYST_MAJOR_CITIES(STGEOM) INDEXTYPE IS MDSYS.SPATIAL_INDEX;
 
@@ -130,3 +130,5 @@ WHERE c.CNTRY_NAME = 'Poland' AND SDO_WITHIN_DISTANCE(m.STGEOM, c.STGEOM, 'dista
 GROUP BY c.CNTRY_NAME;
 
 SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+
+
